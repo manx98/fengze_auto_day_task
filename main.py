@@ -18,11 +18,11 @@ ApiHost = "https://micheng-api.zhongfu.net"
 
 session = requests.Session()
 session.headers = {
-    "authorization": os.getenv("AUTH_TOKEN"),
+    "authorization": os.getenv("FZ_AUTH_TOKEN"),
     "user-agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/128.0.0.0 Safari/537.36",
 }
 
-client = ZhipuAI(api_key=os.getenv("ZHIPU_TOKEN"))
+client = ZhipuAI(api_key=os.getenv("FZ_ZHIPU_TOKEN"))
 
 
 def study_task_list_v2():
@@ -32,7 +32,10 @@ def study_task_list_v2():
     """
     url = f"{ApiHost}/study/task/list/v2"
     response = session.post(url, json={"page": 1, "pageSize": 15, "name": "", "taskType": [1, 11, 6, 9, 10, 2]}).json()
-    return response["data"]["list"]
+    try:
+        return response["data"]["list"]
+    except Exception:
+        raise Exception(f"study_task_list_v2: {response}")
 
 
 def start_exam(task_id, detail_id):
@@ -43,11 +46,15 @@ def start_exam(task_id, detail_id):
     :return:
     """
     url = f"{ApiHost}/study/exam/start"
-    return session.post(url, json={
+    rsp = session.post(url, json={
         "taskId": task_id,
         "detailId": detail_id,
         "face": "",
-    }).json()["data"]
+    }).json()
+    try:
+        return rsp["data"]
+    except Exception:
+        raise Exception(f"start_exam: {rsp}")
 
 
 def get_question_answer(question_info):
