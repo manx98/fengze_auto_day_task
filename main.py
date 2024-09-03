@@ -15,7 +15,7 @@ from zhipuai import ZhipuAI
 import requests
 
 ApiHost = "https://micheng-api.zhongfu.net"
-
+os.environ["NO_PROXY"] = ApiHost
 session = requests.Session()
 session.headers = {
     "authorization": os.getenv("FZ_AUTH_TOKEN"),
@@ -102,7 +102,7 @@ def submit_exam(exam_info):
 
 def auto_exam():
     tasks = study_task_list_v2()
-    if not tasks:
+    if tasks:
         for task in tasks:
             name = task["taskName"]
             if name.find("保密每日一练") > -1:
