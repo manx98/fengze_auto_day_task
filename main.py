@@ -1,3 +1,12 @@
+#!/usr/bin/python
+# coding=utf-8
+'''
+File: fengze_auto_day_task.py
+Author: manx98
+Date: 2024/9/3 8:57
+cron: * 40 8 * * 1-5
+new Env('fengze每一日一题');
+'''
 import os
 import random
 
